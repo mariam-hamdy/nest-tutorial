@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
 
 @Entity('user')
 export class UserEntity {
@@ -13,7 +14,7 @@ export class UserEntity {
     email: string
 
     @Column()
-    passwordHash: string
+    password: string
 
     @Column({default: ''})
     phone: string
@@ -23,4 +24,8 @@ export class UserEntity {
 
     @Column({default: false})
     isAdmin: boolean;
+
+    
+
+    
 }
