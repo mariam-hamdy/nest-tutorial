@@ -1,4 +1,77 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { NOTFOUND } from 'dns';
+import { UserEntity } from 'src/database/entity/user.entity';
+import { Repository } from 'typeorm';
+import { UpdateUserDTO } from './dto/updateUser.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class UserService {}
+export class UserService {
+
+    constructor(@InjectRepository(UserEntity) private UserRepo: Repository<UserEntity>) {}
+
+    async getOneUser(id: number) {
+        
+        const user = await this.UserRepo.findOne({
+            where: {id: id}
+        })
+
+        if(!user) {
+            throw new HttpException(NOTFOUND, HttpStatus.NOT_FOUND)
+        }
+
+        delete user.password
+
+        return {user}
+    }
+
+    async updateOneUser(updateUserDto: UpdateUserDTO, id: number) {
+        
+        const password = updateUserDto.password
+        if(password) {
+            const newPasswordHash = await this.generateHash(password)
+            const user = await this.UserRepo.findOne({
+                where: {id:id}
+            })
+            const isSame = await bcrypt.compare(newPasswordHash, user.password)
+            if(!isSame) {
+                throw new HttpException(BadRequestException, HttpStatus.BAD_REQUEST)
+            }
+            updateUserDto.password = newPasswordHash
+        }
+        
+        
+        
+        const newUser = await this.UserRepo.update(id, updateUserDto)
+
+        if(!newUser) {
+            throw new HttpException(NOTFOUND, HttpStatus.NOT_FOUND)
+        }
+
+        const finalresult = await this.UserRepo.findOneOrFail({
+            where: {id:id}
+        })
+
+        delete finalresult.password
+        delete finalresult.isAdmin
+        return {newUser: finalresult}
+
+    }
+
+    async getAllUsers() {
+
+        const users = await this.UserRepo.find()
+
+        return {users, count: users.length}
+    }
+
+
+    async generateHash(password: string) {
+        const salt = await bcrypt.genSalt(10)
+        const passwordHash = await bcrypt.hash(password, salt)
+
+        return passwordHash
+    }
+
+}
