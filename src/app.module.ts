@@ -7,6 +7,7 @@ import { ProductModule } from './product/product.module';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true // use migration for production, it is used only for dev
     }),
     UserModule,
-    AuthModule
+    AuthModule,
+    CategoryModule
   ],
   controllers: [AppController],
   providers: [AppService],

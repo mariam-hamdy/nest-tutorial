@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { CategoryEntity } from "./category.entity";
 
 
 @Entity({name: 'product'})
@@ -19,8 +20,10 @@ export class ProductEntity {
     @Column({default: ''})
     brand: string;
 
-    @Column({default: ''})
-    category: string;
+    @ManyToOne(() => CategoryEntity, (categoryEntity) => categoryEntity.products,
+    {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+    @JoinColumn()
+    category: CategoryEntity;
 
     @Column({default: 0})
     count: number;
@@ -30,6 +33,9 @@ export class ProductEntity {
 
     @Column({default: 0})
     rating: number;
+
+    @CreateDateColumn({default: () => 'CURRENT_TIMESTAMP'})
+    createdAt: Date
 
     
 }

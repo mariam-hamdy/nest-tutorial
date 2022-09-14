@@ -18,10 +18,6 @@ export class ProductUpdateDto {
     @IsOptional()
     brand: string;
 
-    @IsString()
-    @IsOptional()
-    category: string;
-
     @IsNumber()
     @IsOptional()
     count: number;

@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { CategoryDTO } from 'src/category/dto/category.dto';
 import { ProductDto } from './dto/product.dto';
 import { ProductUpdateDto } from './dto/productUpdate.dto';
 import { ProductService } from './product.service';
@@ -13,26 +14,7 @@ export class ProductController {
     }
 
 
-    @Get()
-    getProducts() {
-        return this.productService.getAllProducts()
-    }
-
-    @Get(':id')
-    getOne(@Param('id') id: number) {
-        return this.productService.getOneProduct(id)
-    }
-
-    @Patch(':id') 
-    updateOne(@Param('id') id: number, @Body() productUpdateDto: ProductUpdateDto) {
-        return this.productService.updateOneProduct(id, productUpdateDto)
-    }
-
-
-    @Delete(':id')
-    deleteOne(@Param('id') id: number) {
-        return this.productService.deleteOneProduct(id)
-    }
+   
 
 }
 

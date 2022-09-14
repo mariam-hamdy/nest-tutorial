@@ -18,8 +18,9 @@ export class UserController {
 
     @UseGuards(JwtGuard)
     @Patch(':id')
-    updateUser(@Body() updateUserDto: UpdateUserDTO, @Param('id') id: number) {
-        return this.userService.updateOneUser(updateUserDto, id)
+    updateUser(@Body() updateUserDto: UpdateUserDTO, @User('id') userId:number,
+    @Param('id') id: number) {
+        return this.userService.updateOneUser(updateUserDto, userId, id)
     }
 
     @Get()

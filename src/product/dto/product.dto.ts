@@ -1,4 +1,6 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsNumber, IsObject, IsOptional, IsString } from "class-validator";
+import { CategoryDTO } from "src/category/dto/category.dto";
+import { ICategory } from "src/category/dto/category.model";
 
 export class ProductDto {
     
@@ -16,8 +18,8 @@ export class ProductDto {
     @IsString()
     brand: string;
 
-    @IsString()
-    category: string;
+   @IsNumber()
+   category: number;
 
     @IsNumber()
     count: number;

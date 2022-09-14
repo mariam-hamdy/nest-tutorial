@@ -26,13 +26,18 @@ export class UserService {
         return {user}
     }
 
-    async updateOneUser(updateUserDto: UpdateUserDTO, id: number) {
+    async updateOneUser(updateUserDto: UpdateUserDTO, userId: number, id: number) {
         
+        if(id!=userId) {
+            throw new HttpException("the param id not equal the userId", HttpStatus.BAD_REQUEST)
+        }
+        
+        //change user password
         const password = updateUserDto.password
         if(password) {
             const newPasswordHash = await this.generateHash(password)
             const user = await this.UserRepo.findOne({
-                where: {id:id}
+                where: {id:userId}
             })
             const isSame = await bcrypt.compare(newPasswordHash, user.password)
             if(!isSame) {
@@ -43,19 +48,19 @@ export class UserService {
         
         
         
-        const newUser = await this.UserRepo.update(id, updateUserDto)
+        const updateUser = await this.UserRepo.update(userId, updateUserDto)
 
-        if(!newUser) {
+        if(!updateUser) {
             throw new HttpException(NOTFOUND, HttpStatus.NOT_FOUND)
         }
 
         const finalresult = await this.UserRepo.findOneOrFail({
-            where: {id:id}
+            where: {id:userId}
         })
 
         delete finalresult.password
         delete finalresult.isAdmin
-        return {newUser: finalresult}
+        return {updatedUser: finalresult}
 
     }
 
