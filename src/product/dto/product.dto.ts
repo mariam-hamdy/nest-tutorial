@@ -1,6 +1,5 @@
 import { IsBoolean, IsNumber, IsObject, IsOptional, IsString } from "class-validator";
 import { CategoryDTO } from "src/category/dto/category.dto";
-import { ICategory } from "src/category/dto/category.model";
 
 export class ProductDto {
     

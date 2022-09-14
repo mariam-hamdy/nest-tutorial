@@ -14,9 +14,14 @@ export class ProductUpdateDto {
     @IsOptional()
     price: number;
 
+    @IsOptional()
+    @IsNumber()
+    category: number
+
     @IsString()
     @IsOptional()
     brand: string;
+
 
     @IsNumber()
     @IsOptional()

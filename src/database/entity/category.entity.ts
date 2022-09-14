@@ -15,6 +15,6 @@ export class CategoryEntity {
     color: string;
 
     @OneToMany( () => ProductEntity, (productEntity) => productEntity.category,
-    {cascade: true})
+    {cascade:true})
     products: ProductEntity[]
 }
